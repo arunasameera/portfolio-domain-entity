@@ -30,17 +30,32 @@ public class StockEntity {
     @Column(nullable = false, length = 16)
     private StockType type;
 
-    // Type-specific optional fields
-    @Column(precision = 19, scale = 6)
-    private BigDecimal dividendRate;   // for PREFERRED
+    // --- Type-specific optional fields ---
 
     @Column(precision = 19, scale = 6)
-    private BigDecimal expenseRatio;   // for ETF
+    private BigDecimal dividendRate;   // PREFERRED only
 
-    protected StockEntity() {}
+    @Column(precision = 19, scale = 6)
+    private BigDecimal expenseRatio;   // ETF only
 
-    public StockEntity(String symbol, int quantity, BigDecimal unitPrice, StockType type,
-                       BigDecimal dividendRate, BigDecimal expenseRatio) {
+    /**
+     * Required by JPA.
+     * Protected to prevent accidental use outside persistence layer.
+     */
+    protected StockEntity() {
+    }
+
+    /**
+     * Preferred constructor for application and tests.
+     */
+    public StockEntity(
+            String symbol,
+            int quantity,
+            BigDecimal unitPrice,
+            StockType type,
+            BigDecimal dividendRate,
+            BigDecimal expenseRatio
+    ) {
         this.symbol = symbol;
         this.quantity = quantity;
         this.unitPrice = unitPrice;
@@ -49,18 +64,59 @@ public class StockEntity {
         this.expenseRatio = expenseRatio;
     }
 
-    public Long getId() { return id; }
-    public String getSymbol() { return symbol; }
-    public int getQuantity() { return quantity; }
-    public BigDecimal getUnitPrice() { return unitPrice; }
-    public StockType getType() { return type; }
-    public BigDecimal getDividendRate() { return dividendRate; }
-    public BigDecimal getExpenseRatio() { return expenseRatio; }
+    // --- Getters ---
 
-    public void setSymbol(String symbol) { this.symbol = symbol; }
-    public void setQuantity(int quantity) { this.quantity = quantity; }
-    public void setUnitPrice(BigDecimal unitPrice) { this.unitPrice = unitPrice; }
-    public void setType(StockType type) { this.type = type; }
-    public void setDividendRate(BigDecimal dividendRate) { this.dividendRate = dividendRate; }
-    public void setExpenseRatio(BigDecimal expenseRatio) { this.expenseRatio = expenseRatio; }
+    public Long getId() {
+        return id;
+    }
+
+    public String getSymbol() {
+        return symbol;
+    }
+
+    public int getQuantity() {
+        return quantity;
+    }
+
+    public BigDecimal getUnitPrice() {
+        return unitPrice;
+    }
+
+    public StockType getType() {
+        return type;
+    }
+
+    public BigDecimal getDividendRate() {
+        return dividendRate;
+    }
+
+    public BigDecimal getExpenseRatio() {
+        return expenseRatio;
+    }
+
+    // --- Setters (used by JPA / tests only) ---
+
+    public void setSymbol(String symbol) {
+        this.symbol = symbol;
+    }
+
+    public void setQuantity(int quantity) {
+        this.quantity = quantity;
+    }
+
+    public void setUnitPrice(BigDecimal unitPrice) {
+        this.unitPrice = unitPrice;
+    }
+
+    public void setType(StockType type) {
+        this.type = type;
+    }
+
+    public void setDividendRate(BigDecimal dividendRate) {
+        this.dividendRate = dividendRate;
+    }
+
+    public void setExpenseRatio(BigDecimal expenseRatio) {
+        this.expenseRatio = expenseRatio;
+    }
 }
